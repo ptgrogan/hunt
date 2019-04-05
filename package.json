@@ -1,0 +1,53 @@
+{
+  "name": "hunt",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "node ./node_modules/frontend-dependencies/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "frontend-dependencies": "^1.1.3",
+    "morgan": "~1.9.0",
+    "socket.io": "~2.2.0"
+  },
+  "frontendDependencies": {
+    "target": "public/scripts/",
+    "packages": {
+      "bootstrap": {
+        "version": "^4.1.3",
+        "src": "dist/",
+        "namespaced": true
+      },
+      "popper.js": {
+        "version": "^1.14.4",
+        "src": "dist/",
+        "namespaced": true
+      },
+      "jquery": {
+        "version": "^3.3.1",
+        "src": "dist/",
+        "namespaced": true
+      },
+      "open-iconic": {
+        "version": "^1.1.1",
+        "src": "font/",
+        "namespaced": true
+      },
+      "chart.js": {
+        "version": "^2.7.3",
+        "src": "dist/",
+        "namespaced": true
+      },
+      "socket.io-client": {
+        "version": "^2.2.0",
+        "src": "dist/",
+        "namespaced": true
+      }
+    }
+  }
+}

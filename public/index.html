@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Multiplayer online stag hunting game">
+    <meta name="author" content="Paul T. Grogan">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <title>The Hunt</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="scripts/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">The Hunt</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item" id="nav-login">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#login">Sign In</a>
+          </li>
+          <li class="nav-item text-light d-none" id="nav-info">
+            <span id="info"></span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="container my-3 border-left border-right border-light">
+      <div class="row">
+        <div class="col-lg-6">
+          <form>
+            <div class="form-group row">
+              <label for="partner" class="col-sm-4 col-form-label">Paired with</label>
+              <div class="col-sm-8">
+                <input type="text" readonly class="form-control-plaintext" id="partner" value="<Random Robot>">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="strategy" class="col-sm-4 col-form-label">Hunt</label>
+              <div class="col-sm-8 btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-secondary">
+                  <input type="radio" name="strategy" autocomplete="off" value="stag"> Stag
+                </label>
+                <label class="btn btn-lg btn-secondary active">
+                  <input type="radio" name="strategy" autocomplete="off" value="hare" checked> Hare
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-6">
+          <label for="text-log">Log</label>
+          <textarea class="form-control" id="log" rows="20"></textarea>
+        </div>
+      </div>
+    </main><!-- /.container -->
+    <footer class="site-footer bg-light text-center border-top border-dark">
+      <p><small class="text-muted">&copy; 2019 Collective Design Lab</small></p>
+    </footer>
+
+    <div id="login" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Log in</h5>
+          </div>
+          <div class="model-body">
+            <form class="form-login">
+              <label for="inputUser" class="sr-only">User name</label>
+              <input type="text" id="inputUser" class="form-control" placeholder="User name" required autofocus>
+              <label for="inputPasscode" class="sr-only">Pass code</label>
+              <input type="text" id="inputPasscode" class="form-control" placeholder="Pass code" required>
+              <small id="login-error" class="form-text text-danger"></small>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-submit">Sign in</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="scripts/jquery/dist/jquery.slim.min.js"></script>
+    <script src="scripts/popper.js/dist/umd/popper.min.js"></script>
+    <script src="scripts/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="scripts/socket.io-client/dist/socket.io.js"></script>
+    <script src="javascripts/client.js"></script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Multiplayer online stag hunting game">
+    <meta name="author" content="Paul T. Grogan">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <title>The Hunt</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="scripts/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stylesheets/style.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">The Hunt</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item" id="nav-login">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#login">Sign In</a>
+          </li>
+          <li class="nav-item text-light d-none" id="nav-info">
+            <span id="info"></span>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="container my-3 border-left border-right border-light">
+      <div class="row">
+        <div class="col-lg-4">
+          <h3>Setup</h3>
+          <table class="table">
+            <tr><th>&nbsp;</th><th>Stag</th><th>Hare</th></tr>
+            <tr><th>Stag</th><td><input class="form-control" type="number" id="SS" value="5"></td><td><input class="form-control" type="number" id="SH" value="0"></td></tr>
+            <tr><th>Hare</th><td><input class="form-control" type="number" id="HS" value="4"></td><td><input class="form-control" type="number" id="HH" value="2"></td></tr>
+          </table>
+          <div class="form-inline">
+              <label for="selectPartners">Partners:</label>
+              <select class="form-control mx-2" id="selectPartners">
+                <option value="random">Random Robot</option>
+                <option value="hidden">Paired (Hidden)</option>
+                <option value="paired">Paired</option>
+              </select>
+              <button type="button" class="btn btn-secondary" id="setup-partners">Setup</button>
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn my-4 mr-4" id="reset-game">Reset Game</button>
+            <button type="button" class="btn btn-primary my-4" id="score-game">Score Game</button>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <ul class="nav nav-tabs" id="dashboard" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="scoreboard-tab" data-toggle="tab" href="#scoreboard" role="tab" aria-controls="scoreboard" aria-selected="true">Scoreboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="plot1-tab" data-toggle="tab" href="#plotDecisions" role="tab" aria-controls="plotDecisions" aria-selected="false">Game Decisions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="plot2-tab" data-toggle="tab" href="#plotOutcomes" role="tab" aria-controls="plotOutcomes" aria-selected="false">Game Outcomes</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="dashboard-content">
+            <div class="tab-pane fade show active" id="scoreboard" role="tabpanel" aria-labelledby="scoreboard-tab">
+              <table class="table table-striped">
+                <thead class="thead-dark">
+                  <th scope="col">#</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Score</th>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="plotDecisions" role="tabpanel" aria-labelledby="plot1-tab">
+              <canvas id="chartDecisions" width="100%"></canvas>
+            </div>
+            <div class="tab-pane fade" id="plotOutcomes" role="tabpanel" aria-labelledby="plot2-tab">
+              <canvas id="chartOutcomes" width="100%"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main><!-- /.container -->
+    <footer class="site-footer bg-light text-center border-top border-dark">
+      <p><small class="text-muted">&copy; 2019 Collective Design Lab</small></p>
+    </footer>
+
+    <div id="login" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Log in</h5>
+          </div>
+          <div class="model-body">
+            <form class="form-login">
+              <label for="inputPassword" class="sr-only">Admin password</label>
+              <input type="password" id="inputPassword" class="form-control " placeholder="Admin password" required autofocus>
+              <small id="login-error" class="form-text text-danger"></small>
+              <button class="btn btn-lg btn-primary btn-block" type="submit" id="login-submit">Sign in</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+          </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="scripts/jquery/dist/jquery.slim.min.js"></script>
+    <script src="scripts/popper.js/dist/umd/popper.min.js"></script>
+    <script src="scripts/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="scripts/chart.js/dist/Chart.bundle.min.js"></script>
+    <script src="scripts/socket.io-client/dist/socket.io.js"></script>
+    <script src="javascripts/admin.js"></script>
+  </body>
+</html>
