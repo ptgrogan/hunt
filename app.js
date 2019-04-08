@@ -115,7 +115,11 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('disconnect', function() {
-    delete users[user];
+    if(admin === user) {
+      admin = null;
+    } else {
+      delete users[user];
+    }
   });
 });
 
