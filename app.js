@@ -115,7 +115,7 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('disconnect', function() {
-    if(admin === user) {
+    if(admin === socket) {
       admin = null;
     } else {
       delete users[user];
