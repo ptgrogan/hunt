@@ -23,7 +23,7 @@ $(function() {
   var chartOutcomes = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['+5 (Stag/Stag)', '+4 (Hare/Stag)', '+2 (Hare/Hare)', '+0 Stag/Hare' ],
+        labels: ['Stag / Stag', 'Hare / Stag', 'Hare / Hare', 'Stag / Hare' ],
         datasets: [{
             label: '# Outcomes',
             data: [0, 0, 0, 0]
