@@ -43,7 +43,9 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('strategy-select', function(data) {
-    users[user].strategy = data.strategy;
+    if(users[user]) {
+      users[user].strategy = data.strategy;
+    }
   });
   socket.on('setup-payoffs', function(data) {
     if(data.payoffs) {
