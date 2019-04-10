@@ -20,15 +20,13 @@ module.exports = function(io) {
         socket.emit('login-auth', {'user': user, 'success': true});
         if(admin) {
           // return users sorted by decreasing score
-          var x = Object.keys(users).map(
-            i => ({
-                'user': i,
-                'score': users[i].score
-            })
-          );
-          console.log(x)
           admin.emit('game-updated', {
-            'users': x.sort((a, b) => b.score - a.score)
+            'users': Object.keys(users).map(
+              i => ({
+                  'user': i,
+                  'score': users[i].score
+              })
+            ).sort((a, b) => b.score - a.score)
           });
         }
       }
