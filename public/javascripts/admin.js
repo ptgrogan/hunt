@@ -79,7 +79,7 @@ $(function() {
     $('#HS').val(data.payoffs[1][0]);
     $('#HH').val(data.payoffs[1][1]);
   });
-  socket.on('game-updated', function(data) {
+  socket.on('score-updated', function(data) {
     $('#scoreboard table tbody').empty();
     if(data.users) {
       var strategy = [0, 0]; // S, H
