@@ -131,7 +131,7 @@ module.exports = function(io) {
         users[i].socket.emit('score-updated', {
           'score': users[i].score,
           'delta': delta[i],
-          'partner': partners[i] ? partners[i] : '<Random Robot>'
+          'partner': partners[i] && users[partners[i]] ? partners[i] : '<Random Robot>'
         });
       }
       if(admin) {
