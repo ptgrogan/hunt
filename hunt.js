@@ -121,7 +121,7 @@ module.exports = function(io) {
       var delta = {};
       var partnerStrategy = {};
       for(var i in users) {
-        if(partners[i]) {
+        if(partners[i] && users[partners[i]]) {
           partnerStrategy[i] = users[partners[i]].strategy;
         } else {
           partnerStrategy[i] = Math.random() > 0.5 ? 'hare' : 'stag';
