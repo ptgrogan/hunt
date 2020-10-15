@@ -1,61 +1,119 @@
+var validator = require('validator');
+
 module.exports = function(io) {
   var admin = null;
   var users = {};
-  var partners = {};
   var payoffs = [[4, 0], [3, 2]]; // [SS, SH], [HS, HH]
 
-  io.on('connection', function(socket) {
+  function removeUser(userName) {
+    // remove the user as anyone's partner
+    Object.keys(users).forEach((i) => {
+      if(users[i].partner === userName) {
+        users[i].partner = null;
+        users[i].partnerLabel = '<Random Robot>';
+        users[i].socket.emit('partner-updated', { 'partnerLabel': users[i].partnerLabel });
+      }
+    });
+    // remove this user from the application
+    if(users.hasOwnProperty(userName)) {
+      console.log('User ' + userName + ' disconnected.');
+      delete users[userName];
+    }
+  }
+
+  function addUser(userName, socket) {
+    if(Object.keys(users).includes(userName)) {
+      return false;
+    } else {
+      users[userName] = {
+        'socket': socket,
+        'partner': null,
+        'partnerLabel': '<Random Robot>',
+        'score': 0,
+        'strategy': 'hare'
+      };
+      console.log('User ' + userName + ' connected.');
+      if(admin) {
+        // return users sorted by decreasing score
+        admin.emit('game-updated', {
+          'users': Object.keys(users).map(
+            i => ({
+                'user': i,
+                'score': users[i].score
+            })
+          ).sort((a, b) => b.score - a.score)
+        });
+      }
+      return true;
+    }
+  }
+
+  io.on('connection', (socket) => {
     var user;
 
     // respond to user login attempt
-    socket.on('login-submit', function(data) {
+    socket.on('login-submit', (data) => {
+      if(user !== null) {
+        removeUser(user);
+      }
       // authenticate unique user with master pass code
-      if(data.passcode !== 'atilla') {
-        socket.emit('login-auth', {'user': data.user, 'success': false, 'message': 'Incorrect pass code'});
-      } else if(Object.keys(users).includes(data.user)) {
-        socket.emit('login-auth', {'user': data.user, 'success': false, 'message': 'User name in use'});
+      if(!data.hasOwnProperty('user') || !data.hasOwnProperty('passcode')) {
+          socket.emit('login-auth', {'success': false, 'message': 'Invalid request'});
+          return;
+      }
+      var userInput = validator.escape(data.user + '');
+      var passcodeInput = validator.escape(data.passcode + '');
+
+      if(passcodeInput !== 'attila') {
+        socket.emit('login-auth', {'user': userInput, 'success': false, 'message': 'Incorrect pass code'});
       } else {
-        user = data.user;
-        users[user] = {'socket': socket, 'score': 0, 'strategy': 'hare'};
-        socket.emit('login-auth', {'user': user, 'success': true});
-        if(admin) {
-          // return users sorted by decreasing score
-          admin.emit('game-updated', {
-            'users': Object.keys(users).map(
-              i => ({
-                  'user': i,
-                  'score': users[i].score
-              })
-            ).sort((a, b) => b.score - a.score)
-          });
+        if(addUser(userInput, socket)) {
+          user = userInput;
+          socket.emit('login-auth', {'user': userInput, 'success': true});
+        } else {
+          socket.emit('login-auth', {'user': userInput, 'success': false, 'message': 'User name in use'});
         }
       }
     });
 
     // respond to admin login attempt
-    socket.on('login-admin', function(data) {
+    socket.on('login-admin', (data) => {
       // authenticate single admin with master password
-      if(data.password !== 'admin') {
+      if(!data.hasOwnProperty('password')) {
+          socket.emit('login-auth', {'success': false, 'message': 'Invalid request'});
+          return;
+      }
+      var passwordInput = validator.escape(data.password + '');
+      if(passwordInput !== 'admin') {
         socket.emit('login-auth', {'success': false, 'message': 'Incorrect password'});
       } else if(admin !== null) {
         socket.emit('login-auth', {'success': false, 'message': 'Already logged in'});
       } else {
         admin = socket;
         socket.emit('login-auth', {'success': true});
+        console.log('Admin connected.');
         socket.emit('payoffs-changed', {'payoffs': payoffs});
       }
     });
 
     // respond to user strategy change
-    socket.on('strategy-select', function(data) {
-      if(users[user]) {
+    socket.on('strategy-select', (data) => {
+      if(users.hasOwnProperty(user)
+          && data.hasOwnProperty('strategy')
+          && (data.strategy === 'hare' || data.strategy === 'stag')) {
         users[user].strategy = data.strategy;
       }
     });
 
     // respond to admin changing payoffs
-    socket.on('setup-payoffs', function(data) {
-      if(data.payoffs) {
+    socket.on('setup-payoffs', (data) => {
+      if(data.hasOwnProperty('payoffs')
+          && Array.isArray(data.payoffs)
+          && data.payoffs.length == 2
+          && Array.isArray(data.payoffs[0])
+          && data.payoffs[0].length == 2
+          && Array.isArray(data.payoffs[1])
+          && data.payoffs[1].length == 2) {
         payoffs[0][0] = Number.parseFloat(data.payoffs[0][0]);
         payoffs[0][1] = Number.parseFloat(data.payoffs[0][1]);
         payoffs[1][0] = Number.parseFloat(data.payoffs[1][0]);
@@ -64,45 +122,47 @@ module.exports = function(io) {
     });
 
     // respond to admin setting up partners
-    socket.on('setup-partners', function(data) {
-      if(data.mode === 'random') {
+    socket.on('setup-partners', (data) => {
+      if(data.hasOwnProperty('mode') && data.mode === 'random') {
         // pair each user with random robot
-        for(var i in users) {
-          partners[i] = null;
-          users[i].socket.emit('partner-updated', '<Random Robot>');
-        }
-      } else if(data.mode === 'paired' || data.mode === 'hidden') {
+        Object.keys(users).forEach((i) => {
+          users[i].partner = null;
+          users[i].partnerLabel = '<Random Robot>';
+          users[i].socket.emit('partner-updated', { 'partnerLabel': users[i].partnerLabel });
+        });
+      } else if(data.hasOwnProperty('mode')
+          && (data.mode === 'paired' || data.mode === 'hidden')) {
         // pair each user with random user
         var userNames = Object.keys(users).sort(() => 0.5 - Math.random());
         while(userNames.length > 1) {
           user1 = userNames.pop();
-          userNames = userNames.sort(() => 0.5 - Math.random());
           user2 = userNames.pop();
-          partners[user1] = user2;
-          partners[user2] = user1;
+          users[user1].partner = user2;
+          users[user2].partner = user1;
         }
         // if odd number of players, pair last with a random robot
         if(userNames.length === 1) {
-          partners[userNames[0]] = null;
+          users[userNames[0]].partner = null;
         }
-        for(var i in users) {
+        Object.keys(users).forEach((i) => {
           if(data.mode === 'paired') {
             // send actual name of partner
-            users[i].socket.emit('partner-updated', {'partner': partners[i]});
+            users[i].partnerLabel = users[i].partner ? users[i].partner : '<Random Robot>';
           } else {
             // hide actual name of partner
-            users[i].socket.emit('partner-updated', {'partner': '<Hidden>'})
+            users[i].partnerLabel = '<Hidden>';
           }
-        }
+          users[i].socket.emit('partner-updated', { 'partnerLabel': users[i].partnerLabel });
+        });
       }
     });
 
     // respond to admin resetting game
-    socket.on('reset-game', function(data) {
-      for(var i in users) {
+    socket.on('reset-game', (data) => {
+      Object.keys(users).forEach((i) => {
         users[i].score = 0;
         users[i].socket.emit('score-reset');
-      }
+      });
       if(admin) {
         // return users sorted in alphabetical order
         admin.emit('score-updated', {
@@ -117,12 +177,12 @@ module.exports = function(io) {
     });
 
     // respond to admin scoring game
-    socket.on('score-game', function(data) {
+    socket.on('score-game', (data) => {
       var delta = {};
       var partnerStrategy = {};
-      for(var i in users) {
-        if(partners[i] && users[partners[i]]) {
-          partnerStrategy[i] = users[partners[i]].strategy;
+      Object.keys(users).forEach((i) => {
+        if(users.hasOwnProperty(users[i].partner)) {
+          partnerStrategy[i] = users[users[i].partner].strategy;
         } else {
           partnerStrategy[i] = Math.random() > 0.5 ? 'hare' : 'stag';
         }
@@ -131,9 +191,11 @@ module.exports = function(io) {
         users[i].socket.emit('score-updated', {
           'score': users[i].score,
           'delta': delta[i],
-          'partner': partners[i] && users[partners[i]] ? partners[i] : '<Random Robot>'
+          'strategy': users[i].strategy,
+          'partnerStrategy': partnerStrategy[i],
+          'partnerLabel': users[i].partnerLabel
         });
-      }
+      });
       if(admin) {
         // return users sorted by decreasing score
         admin.emit('score-updated', {
@@ -151,11 +213,11 @@ module.exports = function(io) {
     });
 
     // respond to user disconnect
-    socket.on('disconnect', function() {
+    socket.on('disconnect', () => {
       if(admin === socket) {
         admin = null;
       } else {
-        delete users[user];
+        removeUser(user);
       }
     });
   });

@@ -6,7 +6,7 @@ Multi-player stag hunting game.
 
 This application demonstrates a multi-player stag hunting game. Players choose between hunting stag or hare and are matched with either: 1) random number generator, 2) random but hidden player, or 3) random and identified player.
 
-Note: the default pass code for users is `atilla` and the default administrator password is `admin`.
+Note: the default pass code for users is `attila` and the default administrator password is `admin`.
 
 ## Installation
 

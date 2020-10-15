@@ -25,8 +25,8 @@ $(function() {
     socket.emit('strategy-select', {'strategy': $('input[name=strategy]:checked').val()});
   });
   socket.on('score-updated', function(data) {
-    var partner = data.partner ? data.partner : '<Unknown>';
-    $('#log').val(new Date().toLocaleTimeString() + ' | Earned ' + data.delta + ' with ' + partner + '\n' + $('#log').val());
+    var partner = data.partnerLabel ? data.partnerLabel : '<Unknown>';
+    $('#log').val(new Date().toLocaleTimeString() + ' | Earned ' + data.delta + ' (total: ' + data.score + '). You selected ' + data.strategy + ', ' + partner + ' selected ' + data.partnerStrategy + '.\n' + $('#log').val());
     $('#info').text(user + ": " + data.score);
   });
   socket.on('score-reset', function(data) {
@@ -34,8 +34,8 @@ $(function() {
     $('#info').text(user + ": " + 0);
   });
   socket.on('partner-updated', function(data) {
-    if(data.partner) {
-      $('#partner').val(data.partner);
+    if(data.partnerLabel) {
+      $('#partner').val(data.partnerLabel);
     } else {
       $('#partner').val("<Random Robot>");
     }
