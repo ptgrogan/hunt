@@ -22,12 +22,12 @@ docker build -t hunt .
 ```
 After the image is built, you can run the image using the following command:
 ```shell
-docker run -p 80:80 hunt
+docker run -p 3000:3000 hunt
 ```
-Where the 80:80 tells Docker to map local port 80 to application port 80 (which is not normally externally accessible). The application will launch with a primary entry point of port 80:
+Where the 3000:3000 tells Docker to map local port 80 to application port 3000 (which is not normally externally accessible). The application will launch with a primary entry point of port 3000:
 
- * [http://localhost:80](http://localhost:80): hunter interface
- * [http://localhost:80/admin.html](http://localhost:80/admin.html): administrator interface
+ * [http://localhost:3000](http://localhost:3000): hunter interface
+ * [http://localhost:3000/admin.html](http://localhost:3000/admin.html): administrator interface
 
 To stop the application, run:
  ```shell
@@ -55,6 +55,6 @@ Then initialize the application with the following command:
 
 ``npm start``
 
-The application will launch with a primary entry point of port 80:
+The application will launch with a primary entry point of port 3000:
 
- * [http://localhost:80](http://localhost:80)
+ * [http://localhost:3000](http://localhost:3000)

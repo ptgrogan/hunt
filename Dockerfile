@@ -2,5 +2,6 @@ FROM node:alpine
 WORKDIR /usr/app
 COPY . .
 RUN npm install --production --unsafe-perm
-EXPOSE 80
+ENV PORT=3000
+EXPOSE $PORT
 CMD [ "npm", "start" ]
