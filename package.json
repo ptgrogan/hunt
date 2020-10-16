@@ -1,7 +1,7 @@
 {
   "name": "hunt",
   "description": "Simple, web-based multi-player stag hunt game.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Paul T. Grogan",
   "license": "Apache-2.0",
   "repository": {

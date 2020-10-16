@@ -71,13 +71,14 @@ $(function() {
   });
   $('input[type=number]').change(function(e) {
     var payoffs = [[$('#SS').val(), $('#SH').val()], [$('#HS').val(), $('#HH').val()]];
-    socket.emit('setup-payoffs', {'payoffs': payoffs});
+    socket.emit('setup-payoffs', {'payoffs': payoffs, 'probCollab': $('#probCollab').val()});
   });
   socket.on('payoffs-changed', function(data) {
     $('#SS').val(data.payoffs[0][0]);
     $('#SH').val(data.payoffs[0][1]);
     $('#HS').val(data.payoffs[1][0]);
     $('#HH').val(data.payoffs[1][1]);
+    $('#probCollab').val(data.probCollab);
   });
   socket.on('score-updated', function(data) {
     $('#scoreboard table tbody').empty();

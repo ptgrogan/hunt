@@ -4,6 +4,7 @@ module.exports = function(io) {
   var admin = null;
   var users = {};
   var payoffs = [[4, 0], [3, 2]]; // [SS, SH], [HS, HH]
+  var probCollab = 0.5;
 
   function removeUser(userName) {
     // remove the user as anyone's partner
@@ -92,7 +93,7 @@ module.exports = function(io) {
         admin = socket;
         socket.emit('login-auth', {'success': true});
         console.log('Admin connected.');
-        socket.emit('payoffs-changed', {'payoffs': payoffs});
+        socket.emit('payoffs-changed', {'payoffs': payoffs, 'probCollab': probCollab});
       }
     });
 
@@ -112,12 +113,22 @@ module.exports = function(io) {
           && data.payoffs.length == 2
           && Array.isArray(data.payoffs[0])
           && data.payoffs[0].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs[0][0]))
+          && !isNaN(Number.parseFloat(data.payoffs[0][1]))
           && Array.isArray(data.payoffs[1])
-          && data.payoffs[1].length == 2) {
+          && data.payoffs[1].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs[1][0]))
+          && !isNaN(Number.parseFloat(data.payoffs[1][1]))) {
         payoffs[0][0] = Number.parseFloat(data.payoffs[0][0]);
         payoffs[0][1] = Number.parseFloat(data.payoffs[0][1]);
         payoffs[1][0] = Number.parseFloat(data.payoffs[1][0]);
         payoffs[1][1] = Number.parseFloat(data.payoffs[1][1]);
+      }
+      if(data.hasOwnProperty('probCollab')
+          && !isNaN(Number.parseFloat(data.probCollab))
+          && Number.parseFloat(data.probCollab) >= 0
+          && Number.parseFloat(data.probCollab) <= 1) {
+        probCollab = Number.parseFloat(data.probCollab);
       }
     });
 
@@ -184,7 +195,7 @@ module.exports = function(io) {
         if(users.hasOwnProperty(users[i].partner)) {
           partnerStrategy[i] = users[users[i].partner].strategy;
         } else {
-          partnerStrategy[i] = Math.random() > 0.5 ? 'hare' : 'stag';
+          partnerStrategy[i] = Math.random() > probCollab ? 'hare' : 'stag';
         }
         delta[i] = payoffs[users[i].strategy === 'stag' ? 0 : 1][partnerStrategy[i] === 'stag' ? 0 : 1]
         users[i].score += delta[i];
