@@ -6,18 +6,18 @@ $(function() {
   function updatePoints(payoffs) {
     if(payoffs instanceof Array) {
       $("#tool").hide();
+      $('#SS').val(payoffs[0][0]);
+      $('#SH').val(payoffs[0][1]);
       $('#HH').val(payoffs[1][1]);
       $('#HS').val(payoffs[1][0]);
-      $('#SH').val(payoffs[0][0]);
-      $('#SS').val(payoffs[0][1]);
     } else {
       $("#tool").show();
       var toolHare = $('input[name=tool-hare]:checked').val();
       var toolStag = $('input[name=tool-stag]:checked').val();
+      $('#SS').val(payoffs[toolStag][0][0]);
+      $('#SH').val(payoffs[toolStag][0][1]);
       $('#HH').val(payoffs[toolHare][1][1]);
       $('#HS').val(payoffs[toolHare][1][0]);
-      $('#SH').val(payoffs[toolStag][0][0]);
-      $('#SS').val(payoffs[toolStag][0][1]);
     }
   }
 
