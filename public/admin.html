@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Multiplayer online stag hunting game">
     <meta name="author" content="Paul T. Grogan">
-    <link rel="icon" type="image/png" href="favicon.png">
     <title>The Hunt</title>
     <link href="scripts/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="stylesheets/style.css" rel="stylesheet">
@@ -32,28 +31,82 @@
       <div class="row">
         <div class="col-lg-4">
           <h3>Setup</h3>
-          <table class="table">
-            <tr><th>&nbsp;</th><th>Hare</th><th>Stag</th></tr>
-            <tr><th>Hare</th><td><input class="form-control" type="number" id="HH"></td><td><input class="form-control" type="number" id="HS"></td></tr>
-            <tr><th>Stag</th><td><input class="form-control" type="number" id="SH"></td><td><input class="form-control" type="number" id="SS"></td></tr>
-          </table>
-          <div class="form-inline">
-              <label for="probCollab">Robot P(Stag):</label>
-              <input class="form-control" type="number" min="0" max="1" step="0.01" id="probCollab">
-          </div>
-          <div class="form-inline">
-              <label for="selectPartners">Partners:</label>
-              <select class="form-control mx-2" id="selectPartners">
-                <option value="random">Random Robot</option>
-                <option value="hidden">Paired (Hidden)</option>
-                <option value="paired">Paired</option>
-              </select>
-          </div>
-          <div class="text-center">
-            <button type="button" class="btn my-4 mr-4" id="reset-game">Reset Game</button>
-            <button type="button" class="btn btn-secondary my-4 mr-4" id="setup-partners">Setup</button>
-            <button type="button" class="btn btn-primary my-4" id="score-game">Score Game</button>
-          </div>
+          <form>
+            <div class="form-group row">
+              <label for="modeSelect" class="col-5 col-form-label">Points Mode:</label>
+              <div class="col-7">
+                <select class="form-control" id="modeSelect">
+                  <option value="simple" selected>Simple</option>
+                  <option value="complex">Complex</option>
+                </select>
+              </div>
+            </div>
+            <table class="table simple">
+              <tr><th>&nbsp;</th><th>Hare</th><th>Stag</th></tr>
+              <tr>
+                <th>Hare</th>
+                <td><input class="form-control" type="number" id="HH" value="2"></td>
+                <td><input class="form-control" type="number" id="HS" value="3"></td>
+              </tr>
+              <tr>
+                <th>Stag</th>
+                <td><input class="form-control" type="number" id="SH" value="0"></td>
+                <td><input class="form-control" type="number" id="SS" value="4"></td>
+              </tr>
+            </table>
+            <table class="table complex" style="display:none;">
+              <tr><th>&nbsp;</th><th>H/H</th><th>H/S</th><th>S/H</th><th>S/S</th></tr>
+              <tr>
+                <th>Atlatl</th>
+                <td><input class="form-control" type="number" id="A-HH" value="0"></td>
+                <td><input class="form-control" type="number" id="A-HS" value="0"></td>
+                <td><input class="form-control" type="number" id="A-SH" value="0"></td>
+                <td><input class="form-control" type="number" id="A-SS" value="4"></td>
+              </tr>
+              <tr>
+                <th>Bow</th>
+                <td><input class="form-control" type="number" id="B-HH" value="1"></td>
+                <td><input class="form-control" type="number" id="B-HS" value="1"></td>
+                <td><input class="form-control" type="number" id="B-SH" value="1.5"></td>
+                <td><input class="form-control" type="number" id="B-SS" value="3.5"></td>
+              </tr>
+              <tr>
+                <th>Club</th>
+                <td><input class="form-control" type="number" id="C-HH" value="1"></td>
+                <td><input class="form-control" type="number" id="C-HS" value="1"></td>
+                <td><input class="form-control" type="number" id="C-SH" value="0.25"></td>
+                <td><input class="form-control" type="number" id="C-SS" value="3.25"></td>
+              </tr>
+              <tr>
+                <th>Dog</th>
+                <td><input class="form-control" type="number" id="D-HH" value="2"></td>
+                <td><input class="form-control" type="number" id="D-HS" value="3"></td>
+                <td><input class="form-control" type="number" id="D-SH" value="0"></td>
+                <td><input class="form-control" type="number" id="D-SS" value="0"></td>
+              </tr>
+            </table>
+            <div class="form-group row">
+              <label for="probCollab" class="col-5 col-form-label">Robot P(Stag):</label>
+              <div class="col-7">
+                <input class="form-control" type="number" min="0" max="1" step="0.01" id="probCollab">
+              </div>
+            </div>
+            <div class="form-group row">
+                <label for="selectPartners" class="col-5 col-form-label">Partners:</label>
+                <div class="col-7">
+                  <select class="form-control" id="selectPartners">
+                    <option value="random">Random Robot</option>
+                    <option value="hidden">Paired (Hidden)</option>
+                    <option value="paired">Paired</option>
+                  </select>
+                </div>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn my-4 mr-4" id="reset-game">Reset Game</button>
+              <button type="button" class="btn btn-secondary my-4 mr-4" id="setup-partners">Setup</button>
+              <button type="button" class="btn btn-primary my-4" id="score-game">Score Game</button>
+            </div>
+          </form>
         </div>
         <div class="col-lg-8">
           <ul class="nav nav-tabs" id="dashboard" role="tablist">

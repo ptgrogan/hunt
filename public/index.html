@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Multiplayer online stag hunting game">
     <meta name="author" content="Paul T. Grogan">
-    <link rel="icon" type="image/png" href="favicon.png">
     <title>The Hunt</title>
     <link href="scripts/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="stylesheets/style.css" rel="stylesheet">
@@ -27,19 +26,81 @@
         <div class="col-lg-6">
           <form>
             <div class="form-group row">
-              <label for="partner" class="col-sm-4 col-form-label">Paired with</label>
-              <div class="col-sm-8">
+              <label for="partner" class="col-4 col-form-label">Paired with:</label>
+              <div class="col-8">
                 <input type="text" readonly class="form-control-plaintext" id="partner" value="<Random Robot>">
               </div>
             </div>
-            <div class="form-group row">
-              <label for="strategy" class="col-sm-4 col-form-label">Hunt</label>
-              <div class="col-sm-8 btn-group btn-group-toggle" data-toggle="buttons">
+            <div class="form-group row" id="payoff">
+              <label for="payoff" class="col-2 col-form-label">Points</label>
+              <div class="col-5">
+                <div class="form-group row">
+                  <label for="SS" class="col-4 col-form-label">Stag:</label>
+                  <div class="col-8">
+                    <input type="text" readonly class="form-control-plaintext" id="SS">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="SH" class="col-4 col-form-label">Hare:</label>
+                  <div class="col-8">
+                    <input type="text" readonly class="form-control-plaintext" id="SH">
+                  </div>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="form-group row">
+                  <label for="HH" class="col-4 col-form-label">Hare:</label>
+                  <div class="col-8">
+                    <input type="text" readonly class="form-control-plaintext" id="HH">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="HS" class="col-4 col-form-label">Stag:</label>
+                  <div class="col-8">
+                    <input type="text" readonly class="form-control-plaintext" id="HS">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row" id="strategy">
+              <label for="strategy" class="col-2 col-form-label">Hunt</label>
+              <div class="col-10 btn-group btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-lg btn-secondary">
-                  <input type="radio" name="strategy" autocomplete="off" value="stag"> Stag
+                  <input type="radio" class="btn-group-toggle" name="strategy" autocomplete="off" value="stag"> Stag
                 </label>
                 <label class="btn btn-lg btn-secondary active">
-                  <input type="radio" name="strategy" autocomplete="off" value="hare" checked> Hare
+                  <input type="radio" class="btn-group-toggle" name="strategy" autocomplete="off" value="hare" checked> Hare
+                </label>
+              </div>
+            </div>
+            <div class="form-group row" style="display:none;" id="tool">
+              <label for="tool" class="col-2 col-form-label">Tool</label>
+              <div class="col-5 btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-light active">
+                  <input type="radio" class="btn-group-toggle" name="tool-stag" autocomplete="off" value="A" checked> Atlatl
+                </label>
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-stag" autocomplete="off" value="B"> Bow
+                </label>
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-stag" autocomplete="off" value="C"> Club
+                </label>
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-stag" autocomplete="off" value="D"> Dog
+                </label>
+              </div>
+              <div class="col-5 btn-group-vertical btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-hare" autocomplete="off" value="A"> Atlatl
+                </label>
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-hare" autocomplete="off" value="B"> Bow
+                </label>
+                <label class="btn btn-lg btn-light">
+                  <input type="radio" class="btn-group-toggle" name="tool-hare" autocomplete="off" value="C"> Club
+                </label>
+                <label class="btn btn-lg btn-light active">
+                  <input type="radio" class="btn-group-toggle" name="tool-hare" autocomplete="off" value="D" checked> Dog
                 </label>
               </div>
             </div>

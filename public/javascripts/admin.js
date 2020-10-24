@@ -40,7 +40,6 @@ $(function() {
     }
   });
 
-
   var socket = io.connect();
   $('#login').modal('toggle');
   $('#login').submit(function(e) {
@@ -67,17 +66,63 @@ $(function() {
     socket.emit('score-game');
   });
   $('#setup-partners').on('click', function(e) {
+    updatePayoffs();
     socket.emit('setup-partners', {'mode': $('#selectPartners option:selected').val()});
   });
-  $('input[type=number]').change(function(e) {
-    var payoffs = [[$('#SS').val(), $('#SH').val()], [$('#HS').val(), $('#HH').val()]];
-    socket.emit('setup-payoffs', {'payoffs': payoffs, 'probCollab': $('#probCollab').val()});
+  function updatePayoffs() {
+    if($('#modeSelect').val() === 'simple') {
+      var payoffs = [
+        [$('#SS').val(), $('#SH').val()],
+        [$('#HS').val(), $('#HH').val()]
+      ];
+      socket.emit('setup-payoffs', {'payoffs': payoffs, 'probCollab': $('#probCollab').val()});
+    } else {
+      var payoffs = {
+        "A": [[$('#A-SS').val(), $('#A-SH').val()], [$('#A-HS').val(), $('#A-HH').val()]],
+        "B": [[$('#B-SS').val(), $('#B-SH').val()], [$('#B-HS').val(), $('#B-HH').val()]],
+        "C": [[$('#C-SS').val(), $('#C-SH').val()], [$('#C-HS').val(), $('#C-HH').val()]],
+        "D": [[$('#D-SS').val(), $('#D-SH').val()], [$('#D-HS').val(), $('#D-HH').val()]]
+      }
+      socket.emit('setup-payoffs', {'payoffs': payoffs, 'probCollab': $('#probCollab').val()});
+    }
+  }
+  $('#modeSelect').on('change', function(e) {
+    if($(this).val() === 'simple') {
+      $('table.simple').show();
+      $('table.complex').hide();
+      updatePayoffs();
+    } else {
+      $('table.simple').hide();
+      $('table.complex').show();
+      updatePayoffs();
+    }
   });
   socket.on('payoffs-changed', function(data) {
-    $('#SS').val(data.payoffs[0][0]);
-    $('#SH').val(data.payoffs[0][1]);
-    $('#HS').val(data.payoffs[1][0]);
-    $('#HH').val(data.payoffs[1][1]);
+    if(data.payoffs instanceof Array) {
+      $('#modeSelect').val('simple');
+      $('#SS').val(data.payoffs[0][0]);
+      $('#SH').val(data.payoffs[0][1]);
+      $('#HS').val(data.payoffs[1][0]);
+      $('#HH').val(data.payoffs[1][1]);
+    } else {
+      $('#modeSelect').val('complex');
+      $('#A-SS').val(data.payoffs['A'][0][0]);
+      $('#A-SH').val(data.payoffs['A'][0][1]);
+      $('#A-HS').val(data.payoffs['A'][1][0]);
+      $('#A-HH').val(data.payoffs['A'][1][1]);
+      $('#B-SS').val(data.payoffs['B'][0][0]);
+      $('#B-SH').val(data.payoffs['B'][0][1]);
+      $('#B-HS').val(data.payoffs['B'][1][0]);
+      $('#B-HH').val(data.payoffs['B'][1][1]);
+      $('#C-SS').val(data.payoffs['C'][0][0]);
+      $('#C-SH').val(data.payoffs['C'][0][1]);
+      $('#C-HS').val(data.payoffs['C'][1][0]);
+      $('#C-HH').val(data.payoffs['C'][1][1]);
+      $('#D-SS').val(data.payoffs['D'][0][0]);
+      $('#D-SH').val(data.payoffs['D'][0][1]);
+      $('#D-HS').val(data.payoffs['D'][1][0]);
+      $('#D-HH').val(data.payoffs['D'][1][1]);
+    }
     $('#probCollab').val(data.probCollab);
   });
   socket.on('score-updated', function(data) {

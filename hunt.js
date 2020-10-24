@@ -4,6 +4,16 @@ module.exports = function(io) {
   var admin = null;
   var users = {};
   var payoffs = [[4, 0], [3, 2]]; // [SS, SH], [HS, HH]
+  /*
+  var payoffs = {
+    // [SS, SH], [HS, HH]
+    "A": [[4, 0], [0, 0]],
+    "B": [[3.5, 1.5], [1, 1]],
+    "C": [[3.25, 0.25], [1, 1]],
+    "D": [[0, 0], [3, 2]]
+  };
+  */
+
   var probCollab = 0.5;
 
   function removeUser(userName) {
@@ -31,7 +41,8 @@ module.exports = function(io) {
         'partner': null,
         'partnerLabel': '<Random Robot>',
         'score': 0,
-        'strategy': 'hare'
+        'strategy': 'hare',
+        'design': 'D'
       };
       console.log('User ' + userName + ' connected.');
       if(admin) {
@@ -71,6 +82,7 @@ module.exports = function(io) {
         if(addUser(userInput, socket)) {
           user = userInput;
           socket.emit('login-auth', {'user': userInput, 'success': true});
+          socket.emit('payoffs-changed', {'payoffs': payoffs});
         } else {
           socket.emit('login-auth', {'user': userInput, 'success': false, 'message': 'User name in use'});
         }
@@ -104,6 +116,11 @@ module.exports = function(io) {
           && (data.strategy === 'hare' || data.strategy === 'stag')) {
         users[user].strategy = data.strategy;
       }
+      if(users.hasOwnProperty(user)
+          && data.hasOwnProperty('design')
+          && (data.design === 'A' || data.design === 'B' || data.design === 'C' || data.design === 'D')) {
+        users[user].design = data.design;
+      }
     });
 
     // respond to admin changing payoffs
@@ -119,10 +136,73 @@ module.exports = function(io) {
           && data.payoffs[1].length == 2
           && !isNaN(Number.parseFloat(data.payoffs[1][0]))
           && !isNaN(Number.parseFloat(data.payoffs[1][1]))) {
-        payoffs[0][0] = Number.parseFloat(data.payoffs[0][0]);
-        payoffs[0][1] = Number.parseFloat(data.payoffs[0][1]);
-        payoffs[1][0] = Number.parseFloat(data.payoffs[1][0]);
-        payoffs[1][1] = Number.parseFloat(data.payoffs[1][1]);
+        payoffs = [
+          [Number.parseFloat(data.payoffs[0][0]), Number.parseFloat(data.payoffs[0][1])],
+          [Number.parseFloat(data.payoffs[1][0]), Number.parseFloat(data.payoffs[1][1])]
+        ];
+      } else if(data.hasOwnProperty('payoffs')
+          && data.payoffs.hasOwnProperty('A')
+          && Array.isArray(data.payoffs.A)
+          && data.payoffs.A.length == 2
+          && Array.isArray(data.payoffs.A[0])
+          && data.payoffs.A[0].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.A[0][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.A[0][1]))
+          && Array.isArray(data.payoffs.A[1])
+          && data.payoffs.A[1].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.A[1][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.A[1][1]))
+          && data.payoffs.hasOwnProperty('B')
+          && Array.isArray(data.payoffs.B)
+          && data.payoffs.B.length == 2
+          && Array.isArray(data.payoffs.B[0])
+          && data.payoffs.B[0].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.B[0][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.B[0][1]))
+          && Array.isArray(data.payoffs.B[1])
+          && data.payoffs.B[1].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.B[1][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.B[1][1]))
+          && data.payoffs.hasOwnProperty('C')
+          && Array.isArray(data.payoffs.C)
+          && data.payoffs.C.length == 2
+          && Array.isArray(data.payoffs.C[0])
+          && data.payoffs.C[0].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.C[0][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.C[0][1]))
+          && Array.isArray(data.payoffs.C[1])
+          && data.payoffs.C[1].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.C[1][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.C[1][1]))
+          && data.payoffs.hasOwnProperty('D')
+          && Array.isArray(data.payoffs.D)
+          && data.payoffs.D.length == 2
+          && Array.isArray(data.payoffs.D[0])
+          && data.payoffs.D[0].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.D[0][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.D[0][1]))
+          && Array.isArray(data.payoffs.D[1])
+          && data.payoffs.D[1].length == 2
+          && !isNaN(Number.parseFloat(data.payoffs.D[1][0]))
+          && !isNaN(Number.parseFloat(data.payoffs.D[1][1]))) {
+        payoffs = {
+          'A': [
+            [Number.parseFloat(data.payoffs.A[0][0]), Number.parseFloat(data.payoffs.A[0][1])],
+            [Number.parseFloat(data.payoffs.A[1][0]), Number.parseFloat(data.payoffs.A[1][1])]
+          ],
+          'B': [
+            [Number.parseFloat(data.payoffs.B[0][0]), Number.parseFloat(data.payoffs.B[0][1])],
+            [Number.parseFloat(data.payoffs.B[1][0]), Number.parseFloat(data.payoffs.B[1][1])]
+          ],
+          'C': [
+            [Number.parseFloat(data.payoffs.C[0][0]), Number.parseFloat(data.payoffs.C[0][1])],
+            [Number.parseFloat(data.payoffs.C[1][0]), Number.parseFloat(data.payoffs.C[1][1])]
+          ],
+          'D': [
+            [Number.parseFloat(data.payoffs.D[0][0]), Number.parseFloat(data.payoffs.D[0][1])],
+            [Number.parseFloat(data.payoffs.D[1][0]), Number.parseFloat(data.payoffs.D[1][1])]
+          ],
+        };
       }
       if(data.hasOwnProperty('probCollab')
           && !isNaN(Number.parseFloat(data.probCollab))
@@ -130,6 +210,9 @@ module.exports = function(io) {
           && Number.parseFloat(data.probCollab) <= 1) {
         probCollab = Number.parseFloat(data.probCollab);
       }
+      Object.keys(users).forEach((i) => {
+        users[i].socket.emit('payoffs-changed', { 'payoffs': payoffs });
+      });
     });
 
     // respond to admin setting up partners
@@ -197,7 +280,11 @@ module.exports = function(io) {
         } else {
           partnerStrategy[i] = Math.random() > probCollab ? 'hare' : 'stag';
         }
-        delta[i] = payoffs[users[i].strategy === 'stag' ? 0 : 1][partnerStrategy[i] === 'stag' ? 0 : 1]
+        if(payoffs instanceof Array) {
+          delta[i] = payoffs[users[i].strategy === 'stag' ? 0 : 1][partnerStrategy[i] === 'stag' ? 0 : 1]
+        } else {
+          delta[i] = payoffs[users[i].design][users[i].strategy === 'stag' ? 0 : 1][partnerStrategy[i] === 'stag' ? 0 : 1]
+        }
         users[i].score += delta[i];
         users[i].socket.emit('score-updated', {
           'score': users[i].score,
