@@ -71,12 +71,16 @@ $(function() {
   });
   function updatePayoffs() {
     if($('#modeSelect').val() === 'simple') {
+      $('table.simple').show();
+      $('table.complex').hide();
       var payoffs = [
         [$('#SS').val(), $('#SH').val()],
         [$('#HS').val(), $('#HH').val()]
       ];
       socket.emit('setup-payoffs', {'payoffs': payoffs, 'probCollab': $('#probCollab').val()});
     } else {
+      $('table.simple').hide();
+      $('table.complex').show();
       var payoffs = {
         "A": [[$('#A-SS').val(), $('#A-SH').val()], [$('#A-HS').val(), $('#A-HH').val()]],
         "B": [[$('#B-SS').val(), $('#B-SH').val()], [$('#B-HS').val(), $('#B-HH').val()]],
@@ -100,12 +104,16 @@ $(function() {
   socket.on('payoffs-changed', function(data) {
     if(data.payoffs instanceof Array) {
       $('#modeSelect').val('simple');
+      $('table.simple').show();
+      $('table.complex').hide();
       $('#SS').val(data.payoffs[0][0]);
       $('#SH').val(data.payoffs[0][1]);
       $('#HS').val(data.payoffs[1][0]);
       $('#HH').val(data.payoffs[1][1]);
     } else {
       $('#modeSelect').val('complex');
+      $('table.simple').hide();
+      $('table.complex').show();
       $('#A-SS').val(data.payoffs['A'][0][0]);
       $('#A-SH').val(data.payoffs['A'][0][1]);
       $('#A-HS').val(data.payoffs['A'][1][0]);
