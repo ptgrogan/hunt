@@ -51,6 +51,15 @@ $(function() {
   });
   $('input[name=strategy],input[name=tool-hare],input[name=tool-stag]').on('change', function(e) {
     var strategy = $('input[name=strategy]:checked').val();
+    if(strategy==='hare') {
+      $('.col-stag').removeClass('bg-light font-weight-bold');
+      $('.col-hare').addClass('bg-light font-weight-bold');
+    } else if(strategy==='stag') {
+      $('.col-hare').removeClass('bg-light font-weight-bold');
+      $('.col-stag').addClass('bg-light font-weight-bold');
+    }
+    $('.col-stag').animate({opacity: strategy==='stag'?1.0:0.25});
+    $('.col-hare').animate({opacity: strategy==='hare'?1.0:0.25});
     var design = (
         strategy === 'hare' ? $('input[name=tool-hare]:checked').val()
         : $('input[name=tool-stag]:checked').val()
