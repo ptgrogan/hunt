@@ -58,3 +58,7 @@ Then initialize the application with the following command:
 The application will launch with a primary entry point of port 3000:
 
  * [http://localhost:3000](http://localhost:3000)
+
+ ## Acknowledgement
+
+This material is based upon work supported by the National Science Foundation under Grant No. 1742971 and 1943433. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
